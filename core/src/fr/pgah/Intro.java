@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class Intro extends ApplicationAdapter {
 
   // Déclaration de toutes les variables du programme
+  int nbSprites = 3; // nombre de sprite
   int[] vitesses; // vitesse de chaques sprite
   SpriteBatch batch; // pour pouvoir dessiner à l'écran
   Texture[] imgs; // contient les images de chaque sprite
@@ -28,9 +29,14 @@ public class Intro extends ApplicationAdapter {
   // pas quelque chose d'usuel en Java
   public void create() {
 
+    
+     // On demande à la bibliothèque la hauteur et la largeur de la fenêtre
+     hauteurFenetre = Gdx.graphics.getHeight();
+     largeurFenetre = Gdx.graphics.getWidth();
+
     batch = new SpriteBatch(); // type objet => instanciation (new)
    
-    imgs = new Texture[30]; // tableau = type objet aussi ; ici : 2 Textures
+    imgs = new Texture[nbSprites]; // tableau = type objet aussi ; ici : 2 Textures
 
     // Chaque élément du tableau est lui-même un objet (Texture)
     // Il faut donc instancier une Texture pour chaque élément
@@ -39,7 +45,7 @@ public class Intro extends ApplicationAdapter {
     // Les tableaux sont indexés à partir de 0
     // On instancie (new) une nouvelle texture à chaque fois
     imgs[0] = new Texture("eddie.png"); // premier élément
-    for (int i = 1; i < 30 ; i++) {
+    for (int i = 1; i < nbSprites ; i++) {
       imgs[i] = new Texture("bomb.png");// autre sprite
     }
      // deuxième élément
@@ -47,12 +53,13 @@ public class Intro extends ApplicationAdapter {
     // Tableau de coordonnées en X pour chaque sprite
     // int n'est pas un type objet, pas besoin de "new" pour chaque élément
 
-    coordonneesY = new int[30];
-    coordonneesX = new int[30];
+    coordonneesY = new int[nbSprites];
+    coordonneesX = new int[nbSprites];
 
-    for (int i = 0; i <30 ; i++) {
-      coordonneesX[i] = 50;
-      coordonneesY[i] = 100;
+    for (int i = 0; i <nbSprites ; i++) {
+      
+      coordonneesX[i] = (int) (Math.random()*largeurFenetre);
+      coordonneesY[i] = (int) (Math.random()*hauteurFenetre);
       
       
     }
@@ -61,12 +68,12 @@ public class Intro extends ApplicationAdapter {
     
 
     // Idem pour les hauteurs et les largeurs de chaque sprite
-    hauteursImgs = new int[30];
-    largeursImgs = new int[30];
+    hauteursImgs = new int[nbSprites];
+    largeursImgs = new int[nbSprites];
     // Appels de la méthode getHeight et getWidth définie sur les objets de type Texture.
     // C'est sur une autre classe (Texture) donc il faut utiliser la notation
     // pointée.
-    for (int i = 0; i <30; i++){
+    for (int i = 0; i <nbSprites; i++){
     hauteursImgs[i] = imgs[i].getHeight();
     largeursImgs[i] = imgs[i].getWidth();
   }
@@ -74,18 +81,28 @@ public class Intro extends ApplicationAdapter {
 
     // Tableau indiquant, pour chaque sprite, s'il va vers le haut (case à vrai)
     // ou vers le bas (case à faux)
-    versLaDroite = new boolean[30];
-    versLeHaut = new boolean[30];
+    versLaDroite = new boolean[nbSprites];
+    versLeHaut = new boolean[nbSprites];
 
-    for (int i = 0; i <30; i++) {
-      versLaDroite[i] = true;// au début, chaque spite va vers la droite
-      versLeHaut[i] = true;// au début, chaque spite va monter
+    for (int i = 0; i <nbSprites; i++){
+      double aleatoire = Math.random();
+      if (aleatoire < 0.5){
+        versLeHaut[i] = true;
+      }else {
+        versLeHaut[i] = false;
+      }
+      aleatoire = Math.random();
+      if (aleatoire < 0.5){
+        versLaDroite[i] = true;
+      }else {
+        versLaDroite[i] = false;
+      }
     }
-
+      
     //vitesse pour chaque sprite
-    vitesses =  new int[30];
-    for (int i = 0; i <30; i++) {
-      vitesses[i] = 4;
+    vitesses =  new int[nbSprites];
+    for (int i = 0; i <nbSprites; i++) {
+      vitesses[i] = (int) (Math.random()*9) + 1;
     }
     
   
@@ -98,9 +115,7 @@ public class Intro extends ApplicationAdapter {
      // au début, le 1er spite va vers la droite
     versLaDroite[1] = false; // et le 2eme va vers la gauche
 
-    // On demande à la bibliothèque la hauteur et la largeur de la fenêtre
-    hauteurFenetre = Gdx.graphics.getHeight();
-    largeurFenetre = Gdx.graphics.getWidth();
+   
 
     // Quand une méthode est terminée (accolade fermante), Java retourne
     // dans le code appelant la méthode pour continuer l'exécution.
@@ -153,8 +168,8 @@ public class Intro extends ApplicationAdapter {
   // les tableaux de direction si besoin
   public void testerBordures() {
 
-    // Pour tous les indices i de 0 à 30, faire...
-    for (int i = 0; i <30; i++) {
+    // Pour tous les indices i de 0 à nbSprites, faire...
+    for (int i = 0; i <nbSprites; i++) {
 
       // Si le sprite tape en haut...
       if (coordonneesY[i] + hauteursImgs[i] >= hauteurFenetre) {
@@ -189,8 +204,8 @@ public class Intro extends ApplicationAdapter {
 
     // MAJ coordonnées en X
 
-    // Pour tous les indices de 0 à 30, faire...
-    for (int i = 0; i <30; i++) {
+    // Pour tous les indices de 0 à nbSprites, faire...
+    for (int i = 0; i <nbSprites; i++) {
       // Si le sprite i va vers la droite
       if (versLaDroite[i]) {
         // on augmente X
@@ -203,8 +218,8 @@ public class Intro extends ApplicationAdapter {
 
     // MAJ coordonnées en Y
 
-    // Pour tous les indices de 0 à 30, faire...
-    for (int i = 0; i <30; i++) {
+    // Pour tous les indices de 0 à nbSprites, faire...
+    for (int i = 0; i <nbSprites; i++) {
       // Si le sprite i va vers le haut
       if (versLeHaut[i]) {
         // on augmente Y
@@ -222,8 +237,8 @@ public class Intro extends ApplicationAdapter {
     // On indique au SpriteBatch qu'on va dessiner
     batch.begin();
 
-    // Pour tous les indices i de 0 à 30, faire...
-    for (int i = 0; i <30; i++) {
+    // Pour tous les indices i de 0 à nbSprites, faire...
+    for (int i = 0; i <nbSprites; i++) {
       // Dessiner le sprite i avec la bonne texture et les bonnes coordonnées
       batch.draw(imgs[i], coordonneesX[i], coordonneesY[i]);
     }
